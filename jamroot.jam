@@ -8,7 +8,7 @@ import package ;
 project m.sass ;
 
 
-alias libs : : <include>sass ;
+alias libs : : usage-requirements <include>sass ;
 
 
 package.install-data install-license : m.sass : LICENSE ;
