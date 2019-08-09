@@ -19,7 +19,9 @@ class MSassConan(ConanFile):
     exports_sources = (
         "LICENSE*",
         "jamroot.jam",
+        "sass/*"
     )
 
     def package_info(self):
         self.info.header_only()
+        self.cpp_info.includedirs = ["share"]

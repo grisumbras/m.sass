@@ -8,4 +8,9 @@ import package ;
 project m.sass ;
 
 
-package.install-data install : m.sass : LICENSE ;
+alias libs : : <include>sass ;
+
+
+package.install-data install-license : m.sass : LICENSE ;
+alias install : install-license sass//install ;
+explicit install-license install ;

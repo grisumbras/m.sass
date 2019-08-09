@@ -1,0 +1,9 @@
+# Copyright (c) 2019 Dmitry Arkhipov <grisumbras@gmail.com>
+# Distributed under the MIT license (See accompanying file LICENSE)
+
+
+import package ;
+
+
+package.install-data install : m.sass : [ glob-tree *.scss ] ;
+explicit install ;
