@@ -1,81 +1,31 @@
-/*
- * Copyright (c) 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
- * Copyright (c) 2019 Dmitry Arkhipov <grisumbras@gmail.com>
- * Distributed under the MIT license (See accompanying file LICENSE)
- */
+// Copyright (c) 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
+// Copyright (c) 2019 Dmitry Arkhipov <grisumbras@gmail.com>
+// Distributed under the MIT license (See accompanying file LICENSE)
 
 
-$gutter-width: 2rem !default; // The size of the gutter between columns
-$grid-columns: 12 !default; // The number of columns in the grid
+$M_SASS_GRID_SCSS: false !default;
+@if not $M_SASS_GRID_SCSS {
+$M_SASS_GRID_SCSS: true;
 
-// Viewport size breakpoints (minimum viewport widths at which layout changes).
-// Default breakpoints are: tiny (t), small (s), medium (m) and large (l).
-$viewport-breakpoints: (
-  t: 0px,
-  s: 576px,
-  m: 768px,
-  l: 992px,
-) !default;
-
-// Maximum widths of containers for different screen sizes. The value for
-// the smallest breakpoint is deliberatrely missing.
-$container-max-widths: (
-  s: 560px,
-  m: 750px,
-  l: 960px,
-) !default;
-
-
-// Returns minimum breakpoint width. Null for the smallest (first) breakpoint.
-@function viewport-breakpoint-min($name, $breakpoints: $viewport-breakpoints) {
-  $min: map-get($breakpoints, $name);
-  @return if($min != 0, $min, null);
-}
-
-
-// Creates a media quiery for  at least the minimum breakpoint width. No query
-// for the smallest breakpoint. Makes the @content apply to the given
-// breakpoint and wider.
-@mixin viewport-breakpoint-up($name, $breakpoints: $viewport-breakpoints) {
-  $min: viewport-breakpoint-min($name, $breakpoints);
-  @if $min {
-    @media (min-width: $min) {
-      @content;
-    }
-  } @else {
-    @content;
-  }
-}
 
 
 // Important basics
 *, ::before, ::after { box-sizing: border-box; }
 body { margin: 0; }
 
-
-$gutter-half: $gutter-width / 2;
-
-
-// Inspired by Bootstrap and https://www.w3schools.com/css/css_rwd_grid.asp.
-// The container is padded from sides, the row inside removes the padding and
-// columns add it back.
+// 12-column layout. Inspired by Bootstrap and
+// https://www.w3schools.com/css/css_rwd_grid.asp. The container is padded from
+// sides, the row inside removes the padding and columns add it back.
 .m-container {
   width: 100%;
   margin: auto;
-  padding-left: $gutter-half;
-  padding-right: $gutter-half;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
-
-@each $breakpoint, $max-width in $container-max-widths {
-  @include viewport-breakpoint-up($breakpoint, $viewport-breakpoints) {
-    .container { max-width: $max-width; }
-  }
-}
-
 
 .m-row {
-  margin-left: -$gutter-half;
-  margin-right: -$gutter-half;
+  margin-left: -1rem;
+  margin-right: -1rem;
 
   &:after { // avoid rows floating around each other
     content: ' ';
@@ -85,14 +35,4 @@ $gutter-half: $gutter-width / 2;
 }
 
 
-@each $breakpoint in map-keys($viewport-breakpoints) {
-  @include viewport-breakpoint-up($breakpoint, $viewport-breakpoints) {
-    @for $i from 1 through $grid-columns {
-    // %grid-column-#{$breakpoint}-active { float: left; }
-      .col-#{$breakpoint}-#{$i} {
-        // @extend %grid-column-#{$breakpoint}-active;
-        width: 100% * $i / 12;
-      }
-    }
-  }
 }

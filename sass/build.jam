@@ -5,5 +5,9 @@
 import package ;
 
 
-package.install-data install : m.sass : [ glob-tree *.scss ] ;
+package.install-data install
+  : m.sass
+  : [ glob-tree *.scss ]
+  : <install-source-root>.
+  ;
 explicit install ;

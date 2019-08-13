@@ -1,0 +1,25 @@
+*, ::before, ::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.m-container {
+  width: 100%;
+  margin: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.m-row {
+  margin-left: -1rem;
+  margin-right: -1rem;
+}
+
+.m-row:after {
+  content: ' ';
+  clear: both;
+  display: table;
+}

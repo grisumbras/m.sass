@@ -2,6 +2,8 @@
 # Distributed under the MIT license (See accompanying file LICENSE)
 
 
+import make ;
+import os ;
 import testing ;
 
 
@@ -14,4 +16,20 @@ project m.sass-test
     <sass-line-numbers>off
   ;
 
-css use-grid : use-grid.scss /m.sass//libs ;
+
+rule cmp ( result : test + ) {
+  local name = $(result:S=) ;
+  make $(name)
+    : $(result)
+      [ css $(name).helper : $(test) /m.sass//libs ]
+    : @cmp.helper
+    ;
+}
+
+CMP = cmp ;
+if [ os.on-windows ] { CMP = echo n \| comp ; }
+
+actions cmp.helper { $(CMP) $(>) > $(<) ; }
+
+
+cmp use-grid.css : use-grid.scss ;

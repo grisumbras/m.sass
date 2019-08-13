@@ -24,4 +24,4 @@ class MSassConan(ConanFile):
 
     def package_info(self):
         self.info.header_only()
-        self.cpp_info.includedirs = ["share"]
+        self.cpp_info.includedirs = ["share/m.sass"]
