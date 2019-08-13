@@ -6,29 +6,148 @@
 @import "breakpoints";
 
 
-@mixin m-grid-preamble() {
-  // Important basics
-  *, ::before, ::after { box-sizing: border-box; }
-  body { margin: 0; }
+$m-column-count: 12 !default;
+$m-container-max-widths: (
+  s: 560px,
+  m: 750px,
+  l: 960px,
+) !default;
 
-  // 12-column layout. Inspired by Bootstrap and
-  // https://www.w3schools.com/css/css_rwd_grid.asp. The container is padded from
-  // sides, the row inside removes the padding and columns add it back.
-  .m-container {
-    width: 100%;
-    margin: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
+
+*, ::before, ::after { box-sizing: border-box; }
+body { margin: 0; }
+
+.m-container {
+  @extend %m-container;
+
+  width: 100%;
+  margin: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.m-row {
+  margin-left: -1rem;
+  margin-right: -1rem;
+
+  :after { // avoid rows floating around each other
+    content: ' ';
+    clear: both;
+    display: table;
   }
 
-  .m-row {
-    margin-left: -1rem;
-    margin-right: -1rem;
+  > [class*='m-col-'] {
+    position: relative;
+    padding: 1rem;
+  }
+}
 
-    &:after { // avoid rows floating around each other
-      content: ' ';
-      clear: both;
-      display: table;
+[class*='m-clearfix-']::after {
+  display: block;
+  content: ' ';
+  clear: both;
+}
+
+[class*='m-show-'] { display: none; }
+
+.m-container-inflate, :not(.m-row) > [class*='m-col-'] {
+  margin-bottom: 1rem;
+  &:last-child { margin-bottom: 0; }
+}
+
+%m-container {
+  &.m-nopadl { padding-left: 0; }
+  &.m-nopadr { padding-right: 0; }
+  &.m-nopadx {
+    @extend .m-nopadl;
+    @extend .m-nopadr;
+  }
+
+  &.m-nopadt { padding-top: 0; }
+  &.m-nopadb { padding-bottom: 0; }
+  &.m-nopady {
+    @extend .m-nopadt;
+    @extend .m-nopadb;
+  }
+
+  &.m-nopad {
+    @extend .m-nopadx;
+    @extend .m-nopady;
+  }
+}
+
+[class*='m-col-'] { @extend %m-container; }
+
+@mixin m-at-breakpoint($name, $breakpoints: $m-breakpoints) {
+  $size: map-get($breakpoints, $name);
+  @if if($size != 0, $size, null) {
+    @media (min-width: $size) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+$previous: null;
+$inflatable-columns: $m-column-count - 2;
+@each $bp in map-keys($m-breakpoints) {
+  @include m-at-breakpoint($bp) {
+    .m-container { width: map-get($m-container-max-widths, $bp); }
+    [class*='m-col-#{$bp}-'] { float: left; }
+
+    .m-left-#{$bp} {
+      padding-right: 1rem;
+      float: left;
+    }
+
+    .m-right-#{$bp}, {
+      &, &[class*='m-col-#{$bp}-'] {
+        padding-left: 1rem;
+        float: right;
+      }
+    }
+
+    .m-center-#{$bp} {
+      &, &[class*='m-col-#{$bp}-'] {
+        margin-left: auto;
+        margin-right: auto;
+        float: none;
+      }
+    }
+
+    @for $i from 1 through $m-column-count {
+      .m-col-#{$bp}-#{$i} { width: $i * 100% / 12; }
+    }
+
+    @for $i from 1 to $m-column-count {
+      .m-push-#{$bp}-#{$i}  { left: $i * 100% / 12; }
+      .m-pull-#{$bp}-#{$i}  { right: $i * 100% / 12; }
+    }
+
+    @if $previous {
+      .m-container-inflatable .m-col-#{$bp}-#{$inflatable-columns}
+      .m-container-inflate {
+        &:not([class*='m-left-']):not([class*='m-right-']) {
+          margin-left: -10%;
+          margin-right: -10%;
+        }
+
+        &.m-left-s { margin-left: -10%; }
+        &.m-right-s { margin-right: -10%; }
+      }
+
+      .m-clearfix-#{$previous}::after { display: none; }
+
+      .m-hide-#{$bp} { display: none; }
+      .m-show-#{$bp} { display: block; }
+
+      .m-col-#{$bp}-none {
+        width: auto;
+        float: none;
+      }
     }
   }
+
+  $previous: $bp;
 }

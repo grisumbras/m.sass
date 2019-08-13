@@ -2,6 +2,7 @@
 # Distributed under the MIT license (See accompanying file LICENSE)
 
 
+import common ;
 import make ;
 import os ;
 import testing ;
@@ -29,8 +30,13 @@ rule cmp ( result : test + ) {
 CMP = cmp ;
 if [ os.on-windows ] { CMP = echo n \| comp ; }
 
-actions cmp.helper { $(CMP) $(>) > $(<) ; }
+TOUCH = [ common.file-touch-command ] ;
+
+actions cmp.helper {
+  $(CMP) $(>) && $(TOUCH) $(<) ;
+}
 
 
-cmp use-breakpoints.css : use-breakpoints.scss ;
-cmp use-grid.css : use-grid.scss ;
+# cmp use-breakpoints.css : use-breakpoints.scss ;
+# cmp use-grid.css : use-grid.scss ;
+css grid.css : grid.scss /m.sass//libs ;
