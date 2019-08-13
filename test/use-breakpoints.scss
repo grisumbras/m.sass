@@ -1,0 +1,5 @@
+@import "m.sass/breakpoints";
+
+@each $name, $size in $m-breakpoints {
+  .test-#{$name} { width: $size; }
+}

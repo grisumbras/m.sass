@@ -1,0 +1,13 @@
+// Copyright (c) 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
+// Copyright (c) 2019 Dmitry Arkhipov <grisumbras@gmail.com>
+// Distributed under the MIT license (See accompanying file LICENSE)
+
+
+// Viewport size breakpoints (minimum viewport widths at which layout changes).
+// Default breakpoints are: tiny (t), small (s), medium (m) and large (l).
+$m-breakpoints: (
+  t: 0,
+  s: 576px,
+  m: 768px,
+  l: 992px,
+) !default;

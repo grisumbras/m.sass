@@ -3,36 +3,32 @@
 // Distributed under the MIT license (See accompanying file LICENSE)
 
 
-$M_SASS_GRID_SCSS: false !default;
-@if not $M_SASS_GRID_SCSS {
-$M_SASS_GRID_SCSS: true;
+@import "breakpoints";
 
 
+@mixin m-grid-preamble() {
+  // Important basics
+  *, ::before, ::after { box-sizing: border-box; }
+  body { margin: 0; }
 
-// Important basics
-*, ::before, ::after { box-sizing: border-box; }
-body { margin: 0; }
-
-// 12-column layout. Inspired by Bootstrap and
-// https://www.w3schools.com/css/css_rwd_grid.asp. The container is padded from
-// sides, the row inside removes the padding and columns add it back.
-.m-container {
-  width: 100%;
-  margin: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.m-row {
-  margin-left: -1rem;
-  margin-right: -1rem;
-
-  &:after { // avoid rows floating around each other
-    content: ' ';
-    clear: both;
-    display: table;
+  // 12-column layout. Inspired by Bootstrap and
+  // https://www.w3schools.com/css/css_rwd_grid.asp. The container is padded from
+  // sides, the row inside removes the padding and columns add it back.
+  .m-container {
+    width: 100%;
+    margin: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
-}
 
+  .m-row {
+    margin-left: -1rem;
+    margin-right: -1rem;
 
+    &:after { // avoid rows floating around each other
+      content: ' ';
+      clear: both;
+      display: table;
+    }
+  }
 }
